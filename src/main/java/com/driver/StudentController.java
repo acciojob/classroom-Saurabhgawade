@@ -19,41 +19,75 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("students")
 public class StudentController {
 
+    StudentService ss=new StudentService();
+
     @PostMapping("/add-student")
     public ResponseEntity<String> addStudent(@RequestBody Student student){
+        try {
 
-        return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
+            ss.addStudent(student);
+
+            return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/add-teacher")
     public ResponseEntity<String> addTeacher(@RequestBody Teacher teacher){
+        try {
+            ss.addTeacher(teacher);
 
-        return new ResponseEntity<>("New teacher added successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("New teacher added successfully", HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/add-student-teacher-pair")
     public ResponseEntity<String> addStudentTeacherPair(@RequestParam String student, @RequestParam String teacher){
+        try {
+            ss.addStudentTeacherPair(student,teacher);
 
-        return new ResponseEntity<>("New student-teacher pair added successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("New student-teacher pair added successfully", HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get-student-by-name/{name}")
     public ResponseEntity<Student> getStudentByName(@PathVariable String name){
         Student student = null; // Assign student by calling service layer method
+        try {
+            ss.getStudentByName(name,student);
 
-        return new ResponseEntity<>(student, HttpStatus.CREATED);
+            return new ResponseEntity<>(student, HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(student,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get-teacher-by-name/{name}")
     public ResponseEntity<Teacher> getTeacherByName(@PathVariable String name){
         Teacher teacher = null; // Assign student by calling service layer method
+        try {
+            ss.getTeacherByName(name, teacher);
 
-        return new ResponseEntity<>(teacher, HttpStatus.CREATED);
+            return new ResponseEntity<>(teacher, HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(teacher,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get-students-by-teacher-name/{teacher}")
     public ResponseEntity<List<String>> getStudentsByTeacherName(@PathVariable String teacher){
         List<String> students = null; // Assign list of student by calling service layer method
+        ss.getStudentsByTeacherName(teacher,students);
 
         return new ResponseEntity<>(students, HttpStatus.CREATED);
     }
@@ -61,6 +95,7 @@ public class StudentController {
     @GetMapping("/get-all-students")
     public ResponseEntity<List<String>> getAllStudents(){
         List<String> students = null; // Assign list of student by calling service layer method
+        ss.getAllStudents(students);
 
         return new ResponseEntity<>(students, HttpStatus.CREATED);
     }
